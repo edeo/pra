@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import pycurl
 import requests
 import os 

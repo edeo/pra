@@ -9,7 +9,7 @@ import pandas as pd
 import datetime
 import requests
 from bs4 import BeautifulSoup
-
+import time
 
 dol_agency_codes = [
 1220,
@@ -27,6 +27,7 @@ dol_agency_codes = [
 
 
 # find in the current inventory file
+
 def inventory_file_name():
     today_xml_file_name = datetime.datetime.now().strftime('%Y-%m-%d_inventory.xml') 
     daily_inventory = '/home/jupyter-ed/projects/pra/data/inventory'
@@ -63,12 +64,10 @@ def inventory_to_omb_cntrl_number_list(file,dol_xpath_strings):
     tree = etree.parse(file)
     root = tree.getroot()
     omb_cntrl_number_list = []
-
     for string in dol_xpath_strings:
-      req = root.xpath(string)
-      for request in req:
-        omb_cntrl_number_list.append(request.xpath('./OMBControlNumber//text()')[0])
-     
+        req = root.xpath(string)
+        for request in req:
+            omb_cntrl_number_list.append(request.xpath('./OMBControlNumber//text()')[0])
     return(omb_cntrl_number_list)  
 
 
@@ -81,11 +80,9 @@ def history_table_link_generator(omb_control_number):
     
 def history_link_list_creator(omb_cntrl_number_list):
     omb_history_url_list = []
-    
     for number in omb_cntrl_number_list:
         reg_info_url = history_table_link_generator(number)
         omb_history_url_list.append(reg_info_url)    
-    
     return(omb_history_url_list)
     
 # create the new folder for the days html files
@@ -112,7 +109,8 @@ def hmtl_down_from_cntrl_number_list(omb_cntrl_number_list,omb_history_url_list)
     for number in list_range:
         omb_cntrl_instance = omb_cntrl_number_list[number]
         praurl = omb_history_url_list[number]
-        get_history_html_file(praurl,omb_cntrl_instance)    
+        get_history_html_file(praurl,omb_cntrl_instance) 
+        time.sleep(1)
     
     
     
